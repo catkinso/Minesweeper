@@ -1,0 +1,20 @@
+
+
+#define WIN_WIDTH  400
+#define WIN_HEIGHT 600
+
+#define NUM_GRID_SQUARES_X 10
+#define NUM_GRID_SQUARES_Y 12
+
+#define GRID_OFFSET_X 25
+#define GRID_OFFSET_Y 25
+
+#define GRID_SQUARE_SIZE_X 35
+#define GRID_SQUARE_SIZE_Y 35
+
+#define SQUARE_SYMBOL_SIZE_X 25
+#define SQUARE_SYMBOL_SIZE_Y 25
+#define SQUARE_SYMBOL_OFFSET_X \
+                              ((GRID_SQUARE_SIZE_X - SQUARE_SYMBOL_SIZE_X) / 2)
+#define SQUARE_SYMBOL_OFFSET_Y \
+                              ((GRID_SQUARE_SIZE_Y - SQUARE_SYMBOL_SIZE_Y) / 2)
