@@ -1,2 +1,3 @@
 # Minesweeper
-Simple minesweeper game for MacOS.
+
+![screenshot](https://raw.github.com/catkinso/Minesweeper/master/Minesweeper.png)
