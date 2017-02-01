@@ -14,7 +14,16 @@
 
 #define SQUARE_SYMBOL_SIZE_X 25
 #define SQUARE_SYMBOL_SIZE_Y 25
+
 #define SQUARE_SYMBOL_OFFSET_X \
-                              ((GRID_SQUARE_SIZE_X - SQUARE_SYMBOL_SIZE_X) / 2)
+            ((GRID_SQUARE_SIZE_X - SQUARE_SYMBOL_SIZE_X) / 2)
 #define SQUARE_SYMBOL_OFFSET_Y \
-                              ((GRID_SQUARE_SIZE_Y - SQUARE_SYMBOL_SIZE_Y) / 2)
+            ((GRID_SQUARE_SIZE_Y - SQUARE_SYMBOL_SIZE_Y) / 2)
+
+#define GRID_SQUARE_TO_OFFSET_X(x) \
+            (GRID_OFFSET_X + SQUARE_SYMBOL_OFFSET_X \
+                + ((x) * GRID_SQUARE_SIZE_X))
+#define GRID_SQUARE_TO_OFFSET_Y(y) \
+            (GRID_OFFSET_Y + SQUARE_SYMBOL_OFFSET_Y \
+                + ((y) * GRID_SQUARE_SIZE_Y))
+
