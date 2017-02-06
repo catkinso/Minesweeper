@@ -9,13 +9,9 @@
 
 - (id)initWithFrame:(NSRect)frameRect
 {
-    int j, k;
-
     self = [super initWithFrame:frameRect];
 
-    for (j = 0; j < NUM_GRID_SQUARES_X; j++)
-        for (k = 0; k < NUM_GRID_SQUARES_Y; k++)
-            squares[j][k] = GRID_SYMBOL_SOLID;
+    startGame(NUM_GRID_SQUARES_X, NUM_GRID_SQUARES_Y, &mgame);
 
     return self;
 }
@@ -44,39 +40,30 @@
     /* Cycle through each grid square and draw appropriate symbol. */
     for (g = 0; g < NUM_GRID_SQUARES_Y; g++) {
         for (h = 0; h < NUM_GRID_SQUARES_X; h++) {
-            switch (squares[h][g]) {
-            case GRID_SYMBOL_SOLID:
+            GridSquareState gsState;
+
+            getGridSquareState(h, g, &gsState, &mgame);
+
+            switch (gsState) {
+            case GRID_SQUARE_UNCOVERED:
                 [self drawSquareSymbolAtGridsquareX:h squareY:g];
                 break;
-            case GRID_SYMBOL_SOLID_FLAG:
+            case GRID_SQUARE_FLAG:
                 [self drawFlagSymbolAtGridsquareX:h squareY:g];
                 break;
-            case GRID_SYMBOL_X:
+            case GRID_SQUARE_BOMB:
                 [self drawXSymbolAtGridsquareX:h squareY:g];
                 break;
-            case GRID_SYMBOL_ONE:
-                [self drawNumSymbolAtGridsquareX:h squareY:g number:1];
-                break;
-            case GRID_SYMBOL_TWO:
-                [self drawNumSymbolAtGridsquareX:h squareY:g number:2];
-                break;
-            case GRID_SYMBOL_THREE:
-                [self drawNumSymbolAtGridsquareX:h squareY:g number:3];
-                break;
-            case GRID_SYMBOL_FOUR:
-                [self drawNumSymbolAtGridsquareX:h squareY:g number:4];
-                break;
-            case GRID_SYMBOL_FIVE:
-                [self drawNumSymbolAtGridsquareX:h squareY:g number:5];
-                break;
-            case GRID_SYMBOL_SIX:
-                [self drawNumSymbolAtGridsquareX:h squareY:g number:6];
-                break;
-            case GRID_SYMBOL_SEVEN:
-                [self drawNumSymbolAtGridsquareX:h squareY:g number:7];
-                break;
-            case GRID_SYMBOL_EIGHT:
-                [self drawNumSymbolAtGridsquareX:h squareY:g number:8];
+            case GRID_SQUARE_ONE:
+            case GRID_SQUARE_TWO:
+            case GRID_SQUARE_THREE:
+            case GRID_SQUARE_FOUR:
+            case GRID_SQUARE_FIVE:
+            case GRID_SQUARE_SIX:
+            case GRID_SQUARE_SEVEN:
+            case GRID_SQUARE_EIGHT:
+                [self drawNumSymbolAtGridsquareX:h squareY:g
+                                                   number:gsState];
                 break;
             default:
                 break;
@@ -232,22 +219,20 @@
         int x = (int)(mousePoint.x - GRID_OFFSET_X) / GRID_SQUARE_SIZE_X;
         int y = (int)(mousePoint.y - GRID_OFFSET_Y) / GRID_SQUARE_SIZE_Y;
 
-        squares[x][y]++;
-        if (squares[x][y] > GRID_SYMBOL_LAST)
-            squares[x][y] = GRID_SYMBOL_FIRST;
+        if ([NSEvent modifierFlags] & NSEventModifierFlagControl)
+            setGridSquareFlag(x, y, &mgame);
+        else
+            setGridSquareClear(x, y, &mgame);
 
         [self setNeedsDisplay:YES];
     }
 }
 
+/*
 - (void)flagsChanged:(NSEvent *)event
 {
-    if ([event modifierFlags] & NSEventModifierFlagShift)
-        NSLog(@"Shift key pressed.");
-
-    if ([event modifierFlags] & NSEventModifierFlagCapsLock)
-        NSLog(@"CAPS lock on.");
 }
+*/
 
 - (BOOL)canBecomeKeyView
 {
