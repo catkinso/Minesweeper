@@ -1,19 +1,30 @@
-Minesweeper: minesweeperMain.o MinesweeperAppDelegate.o MinesweeperView.o \
-             minesweeperGame.o
-	clang -framework Cocoa -o Minesweeper minesweeperMain.o \
-                              MinesweeperAppDelegate.o MinesweeperView.o \
-                              minesweeperGame.o
+CC = clang
+PROG = Minesweeper
+LDFLAGS = -framework Cocoa
 
-minesweeperMain.o: minesweeperMain.m MinesweeperAppDelegate.h
-	clang -c minesweeperMain.m
+OBJDIR = objs
+OBJECTS = $(addprefix $(OBJDIR)/, minesweeperMain.o MinesweeperAppDelegate.o \
+                                   MinesweeperView.o minesweeperGame.o)
 
-MinesweeperAppDelegate.o: MinesweeperAppDelegate.m MinesweeperAppDelegate.h \
-                          MinesweeperView.h coordinates.h
-	clang -c MinesweeperAppDelegate.m
+$(PROG): $(OBJECTS)
+	$(CC) $(LDFLAGS) -o $(PROG) $(OBJECTS)
 
-MinesweeperView.o: MinesweeperView.m MinesweeperView.h coordinates.h \
-                   minesweeperGame.h
-	clang -c MinesweeperView.m
+$(OBJDIR)/minesweeperMain.o: MinesweeperAppDelegate.h
+$(OBJDIR)/MinesweeperAppDelegate.o: MinesweeperAppDelegate.h \
+                                    MinesweeperView.h coordinates.h
+$(OBJDIR)/MinesweeperView.o: MinesweeperView.h coordinates.h minesweeperGame.h
+$(OBJDIR)/minesweeperGame.o: minesweeperGame.h
 
-minesweeperGame.o: minesweeperGame.c minesweeperGame.h
-	clang -c minesweeperGame.c
+$(OBJDIR)/%.o: %.m
+	$(CC) -o $@ -c $<
+
+$(OBJDIR)/%.o: %.c
+	$(CC) -o $@ -c $<
+
+$(OBJECTS): | $(OBJDIR)
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+clean:
+	rm -fr $(PROG) $(OBJDIR)
